@@ -74,14 +74,14 @@ entryObjects = []
 for entry_str in entries:
     word = get_word(entry_str)
     pos = get_pos(entry_str)
-
     definitions_raw = get_definitions_raw(entry_str)
-    for definition in definitions_raw:
-        definitionTexts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
-        definitionSources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
-        definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
 
-        entryObjects.append(Entry(word, list(definitionObjects), pos))
+    for definition in definitions_raw:
+        definition_texts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
+        definition_sources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
+        definition_objects = map(lambda text, source: Definition(text, source), definition_texts, definition_sources)
+
+        entryObjects.append(Entry(word, list(definition_objects), pos))
 
 # Step 5: Format json string based on entryObjects
 
