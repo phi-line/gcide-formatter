@@ -15,9 +15,10 @@ class Entry:
         return self.__dict__
 
     @staticmethod
-    def from_json( json):
+    def from_json(json_str):
         entry = Entry("", list(), "")
-        entry.__dict__ = json
+        entry.__dict__ = json_str
+        entry.definitions = list(map(lambda json_def: Definition.from_json(json_def), json_str["definitions"]))
         return entry
 
 
@@ -28,6 +29,12 @@ class Definition:
 
     def to_json(self):
         return self.__dict__
+
+    @staticmethod
+    def from_json(json_str):
+        definition = Definition("", "")
+        definition.__dict__ = json_str
+        return definition
 
 
 def __json_handler(obj):
