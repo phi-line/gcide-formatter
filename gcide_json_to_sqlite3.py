@@ -31,8 +31,8 @@ entries = list(entries)
 definitions = []
 
 for i, entry in enumerate(entries):
-    for definition in entry.definitions:
-        d = Definition(i, entry.word, definition.text, definition.source, entry.pos)
+    for definition_escaped in entry.definitions:
+        d = Definition(i, entry.word, definition_escaped.text, definition_escaped.source, entry.pos)
         definitions.append(d)
 
 # Step 4: Create an Sqlite3 database
@@ -59,16 +59,23 @@ db.execute(
 print("Inserting definitions")
 
 for definition in definitions:
+    definition_escaped = Definition(
+        definition.db_id,
+        definition.word.replace("\"", "''"),
+        definition.text.replace("\"", "''"),
+        definition.source.replace("\"", "''"),
+        definition.pos.replace("\"", "''")
+    )
     print("===")
-    print(definition.db_id)
-    print(definition.word)
-    print(definition.text)
-    print(definition.pos)
+    print(definition_escaped.db_id)
+    print(definition_escaped.word)
+    print(definition_escaped.text)
+    print(definition_escaped.pos)
     print("===")
     db.execute(
         f"""
         INSERT INTO Definitions (id, word, text, source, pos) VALUES
-        ({definition.db_id}, "{definition.word}", "{definition.text}", "{definition.source}", "{definition.pos}")
+        ({definition_escaped.db_id}, "{definition_escaped.word}", "{definition_escaped.text}", "{definition_escaped.source}", "{definition_escaped.pos}")
         """
     )
 
