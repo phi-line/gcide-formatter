@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-
+import json
 import os
 import re
-import json
 
 
 class Entry:
@@ -78,9 +77,17 @@ for entry_str in entries:
 
 # Step 5: Format json string based on entryObjects
 
-json = json.dumps(entryObjects, default=json_handler)
+json_str = json.dumps(entryObjects, default=json_handler)
 
-# Step 6: Write file
+# Step 6: Check json validity
+
+try:
+    json.loads(json_str)
+except Exception:
+    print("Error: Json is invalid.")
+    exit(-1)
+
+# Step 7: Write file
 
 with open("output.json", "w") as out:
-    out.write(json)
+    out.write(json_str)
