@@ -3,3 +3,4 @@ input/
 output.json
 .idea/
 __pycache__/
+gcide.db
