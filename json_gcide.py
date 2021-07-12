@@ -2,7 +2,6 @@
 
 import os
 import re
-import shutil
 
 
 # Place this script in a directory that contains the latest, unpacked version of GCIDE in a folder named "in".
