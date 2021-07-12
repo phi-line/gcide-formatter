@@ -56,16 +56,10 @@ for entry_str in entries[10:20]:
 
     if not filter(lambda x: x is not None, re.findall("""<def>.*?</def>.*?</source>]""", entry_str)):
         break
-    definitions = re.findall("""<def>.*?</def>.*?</source>]""", entry_str)
-    for definition in definitions:
+    definitionsUnformatted = re.findall("""<def>.*?</def>.*?</source>]""", entry_str)
+    for definition in definitionsUnformatted:
         definitionTexts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
-        # definitionSources = map(
-        #    lambda text: re.search(f"""(?<=<def>{text}</def>).*<source>.*?</source>""", definition).group(),
-        #    definitionTexts
-        # )
-        # definitionSources = map(lambda source: re.search("(?<=<source>).*?(?=</source>)", source).group(),
-        #                        definitionSources)
-        definitionSources = map(lambda t: "source", definitionTexts)  # TODO source (code above broken)
+        definitionSources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
         definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
 
         entryObjects.append(Entry(word, definitionObjects, "TODO"))  # TODO Part of speech
