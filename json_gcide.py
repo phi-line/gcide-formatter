@@ -8,6 +8,19 @@ import shutil
 # Place this script in a directory that contains the latest, unpacked version of GCIDE in a folder named "in".
 # It will create a formatted JSON file in a folder called "out".
 
+class Entry:
+    def __init__(self, word, definitions, pos):
+        self.word = word
+        self.definitions = definitions
+        self.pos = pos
+
+
+class Definition:
+    def __init__(self, text, source):
+        self.text = text
+        self.source = source
+
+
 def get_cide_files():
     files = os.listdir("in")
     files_sorted = sorted(files)
@@ -26,9 +39,40 @@ for file in get_cide_files():
 # Step 2: Remove new lines
 
 concatenated = concatenated.replace("\n", " ")
-with open("out/concat.txt", "w") as f:
-    f.write(concatenated)
 
 # Step 3: Group entries in list
 
 entries = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
+
+# Step 4: Turn entries into objects
+
+entryObjects = []
+
+for entry_str in entries[10:20]:
+    # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
+    if re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str) is None:  # </?ent> because slash is missing on "Newton"
+        break
+    word = re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str).group()
+
+    if not filter(lambda x: x is not None, re.findall("""<def>.*?</def>.*?</source>]""", entry_str)):
+        break
+    definitions = re.findall("""<def>.*?</def>.*?</source>]""", entry_str)
+    for definition in definitions:
+        definitionTexts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
+        # definitionSources = map(
+        #    lambda text: re.search(f"""(?<=<def>{text}</def>).*<source>.*?</source>""", definition).group(),
+        #    definitionTexts
+        # )
+        # definitionSources = map(lambda source: re.search("(?<=<source>).*?(?=</source>)", source).group(),
+        #                        definitionSources)
+        definitionSources = map(lambda t: "source", definitionTexts)  # TODO source (code above broken)
+        definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
+
+        entryObjects.append(Entry(word, definitionObjects, "TODO"))  # TODO Part of speech
+
+for obj in entryObjects:
+    print(obj.pos, end=": ")
+    print(obj.word)
+    for definition in obj.definitions:
+        print(f"- {definition.text}")
+        print(f"  (from {definition.source})")
