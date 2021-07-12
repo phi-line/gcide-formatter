@@ -82,4 +82,8 @@ for entry_str in entries:
 # Step 5: Format json string based on entryObjects
 
 json = json.dumps(entryObjects, default=json_handler)
-print(json[:500])
+
+# Step 6: Write file
+
+with open("output.json", "w") as out:
+    out.write(json)
