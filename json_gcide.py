@@ -53,6 +53,7 @@ def get_definitions_raw(entry):
 
 
 # Step 1: Concatenate CIDE.(A-Z)
+print("Concatenating CIDE files")
 
 concatenated = ""
 for file in get_cide_files():
@@ -60,18 +61,22 @@ for file in get_cide_files():
         concatenated = concatenated + f.read()
 
 # Step 2: Remove new lines
+print("Removing new lines")
 
 concatenated = concatenated.replace("\n", " ")
 
 # Step 3: Group entries in list
+print("Grouping entries")
 
 entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 
 # Step 4: Convert entries_raw to entries
+print("Converting entries to objects")
 
 entries = []
 
-for entry_raw in entries_raw:
+for i, entry_raw in enumerate(entries_raw):
+    print(f"  Parsing entry {i}", end=" ")
     definitions_raw = get_definitions_raw(entry_raw)
     definitions = []
 
@@ -85,12 +90,15 @@ for entry_raw in entries_raw:
     word = get_word(entry_raw)
     pos = get_pos(entry_raw)
     entries.append(Entry(word, definitions, pos))
+    print(f":: {word}")
 
 # Step 5: Format json string based on entryObjects
+print("Formatting object list to json")
 
 json_str = json.dumps(entries, default=json_handler)
 
 # Step 6: Check json validity
+print("Validating json")
 
 try:
     json.loads(json_str)
@@ -99,6 +107,7 @@ except ValueError:
     exit(-1)
 
 # Step 7: Write file
+print("Writing to output.json")
 
 with open("output.json", "w") as out:
     out.write(json_str)
