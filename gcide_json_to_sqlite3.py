@@ -32,7 +32,7 @@ definitions = []
 
 for i, entry in enumerate(entries):
     for definition in entry.definitions:
-        d = Definition(i, entry.word, definition.text, definition.source, entry.word)
+        d = Definition(i, entry.word, definition.text, definition.source, entry.pos)
         definitions.append(d)
 
 # Step 4: Create an Sqlite3 database
@@ -54,5 +54,22 @@ db.execute(
     );
     """
 )
+
+# Step 6: Insert definitions to table
+print("Inserting definitions")
+
+for definition in definitions:
+    print("===")
+    print(definition.db_id)
+    print(definition.word)
+    print(definition.text)
+    print(definition.pos)
+    print("===")
+    db.execute(
+        f"""
+        INSERT INTO Definitions (id, word, text, source, pos) VALUES
+        ({definition.db_id}, "{definition.word}", "{definition.text}", "{definition.source}", "{definition.pos}")
+        """
+    )
 
 db.close()
