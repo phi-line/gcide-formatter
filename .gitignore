@@ -1,4 +1,4 @@
 venv/
-out/
-in/
+input/
+output.json
 .idea/
