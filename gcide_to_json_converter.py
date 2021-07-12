@@ -24,11 +24,11 @@ class Definition:
         return self.__dict__
 
 
-def json_handler(obj):
+def __json_handler(obj):
     return obj.to_json()
 
 
-def get_cide_files():
+def __get_cide_files():
     files = os.listdir("input")
     files_sorted = sorted(files)
     files_filtered = filter(lambda name: re.match("^CIDE.\\w$", name), files_sorted)
@@ -38,16 +38,16 @@ def get_cide_files():
 
 # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
 # TODO unsafe group() call (could be None type)
-def get_word(entry):
+def __get_word(entry):
     return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry).group()
 
 
-def get_pos(entry):
+def __get_pos(entry):
     match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry)
     return "None" if match is None else match.group()
 
 
-def get_definitions_raw(entry):
+def __get_definitions_raw(entry):
     match = re.findall("""<def>.*?</def>.*?</source>]""", entry)
     filtered = filter(lambda x: x is not None, match)
     return filtered or None
@@ -58,7 +58,7 @@ def get_json():
     print("Concatenating CIDE files")
 
     concatenated = ""
-    for file in get_cide_files():
+    for file in __get_cide_files():
         with open(f"input/{file}", encoding='cp1252') as f:
             concatenated = concatenated + f.read()
 
@@ -79,7 +79,7 @@ def get_json():
 
     for i, entry_raw in enumerate(entries_raw):
         print(f"  Parsing entry {i}", end=" ")
-        definitions_raw = get_definitions_raw(entry_raw)
+        definitions_raw = __get_definitions_raw(entry_raw)
         definitions = []
 
         for definition in definitions_raw:
@@ -90,15 +90,15 @@ def get_json():
             definitions_map = map(lambda text, source: Definition(text, source), definition_texts, definition_sources)
             definitions = list(definitions_map)
 
-        word = get_word(entry_raw)
-        pos = get_pos(entry_raw)
+        word = __get_word(entry_raw)
+        pos = __get_pos(entry_raw)
         entries.append(Entry(word, definitions, pos))
         print(f":: {word}")
 
     # Step 5: Format json string based on entryObjects
     print("Formatting object list to json")
 
-    json_str = json.dumps(entries, default=json_handler)
+    json_str = json.dumps(entries, default=__json_handler)
 
     # Step 6: Check json validity
     print("Validating json")
