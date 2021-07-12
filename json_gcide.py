@@ -83,6 +83,7 @@ for i, entry_raw in enumerate(entries_raw):
     for definition in definitions_raw:
         definition_texts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
         definition_sources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
+        # TODO sources not bound to texts, could lead to errors/wrong source
 
         definitions_map = map(lambda text, source: Definition(text, source), definition_texts, definition_sources)
         definitions = list(definitions_map)
