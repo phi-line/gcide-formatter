@@ -5,9 +5,6 @@ import re
 import json
 
 
-# Place this script in a directory that contains the latest, unpacked version of GCIDE in a folder named "in".
-# It will create a formatted JSON file in a folder called "out".
-
 class Entry:
     def __init__(self, word, definitions, pos):
         self.word = word
