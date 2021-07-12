@@ -76,5 +76,8 @@ for id, definition in enumerate(definitions):
         """
     )
 
+# Step 7: Close DB
+print("Closing database")
+
 db.commit()
 db.close()
