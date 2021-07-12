@@ -38,16 +38,16 @@ def get_cide_files():
 # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
 # TODO unsafe group() call (could be None type)
 def get_word(entry):
-    return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str).group()
+    return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_raw).group()
 
 
 def get_pos(entry):
-    match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str)
+    match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_raw)
     return "None" if match is None else match.group()
 
 
 def get_definitions_raw(entry):
-    match = re.findall("""<def>.*?</def>.*?</source>]""", entry_str)
+    match = re.findall("""<def>.*?</def>.*?</source>]""", entry_raw)
     filtered = filter(lambda x: x is not None, match)
     return filtered or None
 
@@ -65,14 +65,14 @@ concatenated = concatenated.replace("\n", " ")
 
 # Step 3: Group entries in list
 
-entries = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
+entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 
-# Step 4: Turn entries into objects
+# Step 4: Convert entries_raw to entries
 
-entryObjects = []
+entries = []
 
-for entry_str in entries:
-    definitions_raw = get_definitions_raw(entry_str)
+for entry_raw in entries_raw:
+    definitions_raw = get_definitions_raw(entry_raw)
     definitions = []
 
     for definition in definitions_raw:
@@ -82,13 +82,13 @@ for entry_str in entries:
         definitions_map = map(lambda text, source: Definition(text, source), definition_texts, definition_sources)
         definitions = list(definitions_map)
 
-    word = get_word(entry_str)
-    pos = get_pos(entry_str)
-    entryObjects.append(Entry(word, definitions, pos))
+    word = get_word(entry_raw)
+    pos = get_pos(entry_raw)
+    entries.append(Entry(word, definitions, pos))
 
 # Step 5: Format json string based on entryObjects
 
-json_str = json.dumps(entryObjects, default=json_handler)
+json_str = json.dumps(entries, default=json_handler)
 
 # Step 6: Check json validity
 
