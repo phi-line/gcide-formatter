@@ -30,8 +30,8 @@ entries = list(entries)
 definitions = []
 
 for entry in entries:
-    for definition_escaped in entry.definitions:
-        d = Definition(entry.word, definition_escaped.text, definition_escaped.source, entry.pos)
+    for definition in entry.definitions:
+        d = Definition(entry.word, definition.text, definition.source, entry.pos)
         definitions.append(d)
 
 # Step 4: Create an Sqlite3 database
