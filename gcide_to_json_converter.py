@@ -14,6 +14,12 @@ class Entry:
     def to_json(self):
         return self.__dict__
 
+    @staticmethod
+    def from_json( json):
+        entry = Entry("", list(), "")
+        entry.__dict__ = json
+        return entry
+
 
 class Definition:
     def __init__(self, text, source):
