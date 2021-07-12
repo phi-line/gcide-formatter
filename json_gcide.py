@@ -41,6 +41,11 @@ def get_word(entry):
     return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str).group()
 
 
+def get_pos(entry):
+    match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str)
+    return "None" if match is None else match.group()
+
+
 # Step 1: Concatenate CIDE.(A-Z)
 
 concatenated = ""
@@ -62,9 +67,7 @@ entryObjects = []
 
 for entry_str in entries:
     word = get_word(entry_str)
-
-    posMatch = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str)
-    pos = "None" if posMatch is None else posMatch.group()
+    pos = get_pos(entry_str)
 
     if not filter(lambda x: x is not None, re.findall("""<def>.*?</def>.*?</source>]""", entry_str)):
         break
