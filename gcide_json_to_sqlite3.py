@@ -6,8 +6,7 @@ import sqlite3
 
 
 class Definition:
-    def __init__(self, db_id, word, text, source, pos):
-        self.db_id = db_id
+    def __init__(self, word, text, source, pos):
         self.word = word
         self.text = text
         self.source = source
@@ -30,9 +29,9 @@ entries = list(entries)
 
 definitions = []
 
-for i, entry in enumerate(entries):
+for entry in entries:
     for definition_escaped in entry.definitions:
-        d = Definition(i, entry.word, definition_escaped.text, definition_escaped.source, entry.pos)
+        d = Definition(entry.word, definition_escaped.text, definition_escaped.source, entry.pos)
         definitions.append(d)
 
 # Step 4: Create an Sqlite3 database
@@ -58,16 +57,14 @@ db.execute(
 # Step 6: Insert definitions to table
 print("Inserting definitions")
 
-for definition in definitions:
+for id, definition in enumerate(definitions):
     definition_escaped = Definition(
-        definition.db_id,
         definition.word.replace("\"", "''"),
         definition.text.replace("\"", "''"),
         definition.source.replace("\"", "''"),
         definition.pos.replace("\"", "''")
     )
     print("===")
-    print(definition_escaped.db_id)
     print(definition_escaped.word)
     print(definition_escaped.text)
     print(definition_escaped.pos)
@@ -75,8 +72,9 @@ for definition in definitions:
     db.execute(
         f"""
         INSERT INTO Definitions (id, word, text, source, pos) VALUES
-        ({definition_escaped.db_id}, "{definition_escaped.word}", "{definition_escaped.text}", "{definition_escaped.source}", "{definition_escaped.pos}")
+        ({id}, "{definition_escaped.word}", "{definition_escaped.text}", "{definition_escaped.source}", "{definition_escaped.pos}")
         """
     )
 
+db.commit()
 db.close()
