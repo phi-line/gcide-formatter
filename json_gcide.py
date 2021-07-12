@@ -46,6 +46,12 @@ def get_pos(entry):
     return "None" if match is None else match.group()
 
 
+def get_definitions_raw(entry):
+    match = re.findall("""<def>.*?</def>.*?</source>]""", entry_str)
+    filtered = filter(lambda x: x is not None, match)
+    return filtered or None
+
+
 # Step 1: Concatenate CIDE.(A-Z)
 
 concatenated = ""
@@ -69,10 +75,8 @@ for entry_str in entries:
     word = get_word(entry_str)
     pos = get_pos(entry_str)
 
-    if not filter(lambda x: x is not None, re.findall("""<def>.*?</def>.*?</source>]""", entry_str)):
-        break
-    definitionsUnformatted = re.findall("""<def>.*?</def>.*?</source>]""", entry_str)
-    for definition in definitionsUnformatted:
+    definitions_raw = get_definitions_raw(entry_str)
+    for definition in definitions_raw:
         definitionTexts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
         definitionSources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
         definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
