@@ -2,6 +2,7 @@
 
 import os
 import re
+import json
 
 
 # Place this script in a directory that contains the latest, unpacked version of GCIDE in a folder named "in".
@@ -13,11 +14,21 @@ class Entry:
         self.definitions = definitions
         self.pos = pos
 
+    def to_json(self):
+        return self.__dict__
+
 
 class Definition:
     def __init__(self, text, source):
         self.text = text
         self.source = source
+
+    def to_json(self):
+        return self.__dict__
+
+
+def json_handler(obj):
+    return obj.to_json()
 
 
 def get_cide_files():
@@ -66,4 +77,9 @@ for entry_str in entries:
         definitionSources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
         definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
 
-        entryObjects.append(Entry(word, definitionObjects, pos))
+        entryObjects.append(Entry(word, list(definitionObjects), pos))
+
+# Step 5: Format json string based on entryObjects
+
+json = json.dumps(entryObjects, default=json_handler)
+print(json[:500])
