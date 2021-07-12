@@ -68,10 +68,3 @@ for entry_str in entries:
         definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
 
         entryObjects.append(Entry(word, definitionObjects, pos))
-
-# for obj in entryObjects:
-#    print(obj.pos, end=": ")
-#    print(obj.word)
-#    for definition in obj.definitions:
-#        print(f"- {definition.text}")
-#        print(f"  (from {definition.source})")
