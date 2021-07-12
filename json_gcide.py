@@ -94,7 +94,7 @@ json_str = json.dumps(entries, default=json_handler)
 
 try:
     json.loads(json_str)
-except Exception:
+except ValueError:
     print("Error: Json is invalid.")
     exit(-1)
 
