@@ -29,7 +29,7 @@ def json_handler(obj):
 
 
 def get_cide_files():
-    files = os.listdir("in")
+    files = os.listdir("input")
     files_sorted = sorted(files)
     files_filtered = filter(lambda name: re.match("^CIDE.\\w$", name), files_sorted)
     files_list = list(files_filtered)
@@ -40,7 +40,7 @@ def get_cide_files():
 
 concatenated = ""
 for file in get_cide_files():
-    with open(f"in/{file}", encoding='cp1252') as f:
+    with open(f"input/{file}", encoding='cp1252') as f:
         concatenated = concatenated + f.read()
 
 # Step 2: Remove new lines
