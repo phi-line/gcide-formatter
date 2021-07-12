@@ -35,6 +35,12 @@ def get_cide_files():
     return files_list
 
 
+# TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
+# TODO unsafe group() call (could be None type)
+def get_word(entry):
+    return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str).group()
+
+
 # Step 1: Concatenate CIDE.(A-Z)
 
 concatenated = ""
@@ -55,12 +61,7 @@ entries = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 entryObjects = []
 
 for entry_str in entries:
-    # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
-    wordMatch = re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str)  # </?ent> because slash is missing on "Newton"
-    if wordMatch is None:
-        print("err: wordMatch is none")
-        break
-    word = wordMatch.group()
+    word = get_word(entry_str)
 
     posMatch = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str)
     pos = "None" if posMatch is None else posMatch.group()
