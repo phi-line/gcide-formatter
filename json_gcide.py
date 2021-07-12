@@ -53,6 +53,7 @@ for entry_str in entries[10:20]:
     if re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str) is None:  # </?ent> because slash is missing on "Newton"
         break
     word = re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str).group()
+    pos = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str).group()
 
     if not filter(lambda x: x is not None, re.findall("""<def>.*?</def>.*?</source>]""", entry_str)):
         break
@@ -62,7 +63,7 @@ for entry_str in entries[10:20]:
         definitionSources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
         definitionObjects = map(lambda text, source: Definition(text, source), definitionTexts, definitionSources)
 
-        entryObjects.append(Entry(word, definitionObjects, "TODO"))  # TODO Part of speech
+        entryObjects.append(Entry(word, definitionObjects, pos))
 
 for obj in entryObjects:
     print(obj.pos, end=": ")
