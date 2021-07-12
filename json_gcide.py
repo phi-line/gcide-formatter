@@ -48,12 +48,16 @@ entries = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 
 entryObjects = []
 
-for entry_str in entries[10:20]:
+for entry_str in entries:
     # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
-    if re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str) is None:  # </?ent> because slash is missing on "Newton"
+    wordMatch = re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str)  # </?ent> because slash is missing on "Newton"
+    if wordMatch is None:
+        print("err: wordMatch is none")
         break
-    word = re.search("""(?<=<ent>).*?(?=</?ent>)""", entry_str).group()
-    pos = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str).group()
+    word = wordMatch.group()
+
+    posMatch = re.search("""(?<=<pos>).*?(?=</pos>)""", entry_str)
+    pos = "None" if posMatch is None else posMatch.group()
 
     if not filter(lambda x: x is not None, re.findall("""<def>.*?</def>.*?</source>]""", entry_str)):
         break
@@ -65,9 +69,9 @@ for entry_str in entries[10:20]:
 
         entryObjects.append(Entry(word, definitionObjects, pos))
 
-for obj in entryObjects:
-    print(obj.pos, end=": ")
-    print(obj.word)
-    for definition in obj.definitions:
-        print(f"- {definition.text}")
-        print(f"  (from {definition.source})")
+# for obj in entryObjects:
+#    print(obj.pos, end=": ")
+#    print(obj.word)
+#    for definition in obj.definitions:
+#        print(f"- {definition.text}")
+#        print(f"  (from {definition.source})")
