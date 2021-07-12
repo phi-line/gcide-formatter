@@ -64,15 +64,15 @@ for id, definition in enumerate(definitions):
         definition.source.replace("\"", "''"),
         definition.pos.replace("\"", "''")
     )
-    print("===")
-    print(definition_escaped.word)
-    print(definition_escaped.text)
-    print(definition_escaped.pos)
-    print("===")
     db.execute(
         f"""
-        INSERT INTO Definitions (id, word, text, source, pos) VALUES
-        ({id}, "{definition_escaped.word}", "{definition_escaped.text}", "{definition_escaped.source}", "{definition_escaped.pos}")
+        INSERT INTO Definitions (id, word, text, source, pos) VALUES (
+            {id},
+            "{definition_escaped.word}",
+            "{definition_escaped.text}",
+            "{definition_escaped.source}",
+            "{definition_escaped.pos}"
+        ) 
         """
     )
 
