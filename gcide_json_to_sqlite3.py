@@ -13,17 +13,10 @@ class Definition:
         self.pos = pos
 
 
-# Get json
-print("Getting json definitions")
+# Get definitions
+print("Getting definitions")
 
-json_str = gcide_json.get_definitions_json()
-
-# Deserialize json
-print("Deserializing json")
-
-definitions = json.loads(json_str)
-definitions = map(lambda j: gcide_json.Definition.from_json(j), definitions)
-definitions = list(definitions)
+definitions = gcide_json.get_definitions()
 
 # Create an Sqlite3 database
 print("Creating gcide.db")
