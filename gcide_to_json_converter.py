@@ -67,7 +67,7 @@ def __get_definitions_raw(entry):
 
 
 def get_json():
-    # Step 1: Concatenate CIDE.(A-Z)
+    # Concatenate CIDE.(A-Z)
     print("Concatenating CIDE files")
 
     concatenated = ""
@@ -75,17 +75,17 @@ def get_json():
         with open(f"input/{file}", encoding='cp1252') as f:
             concatenated = concatenated + f.read()
 
-    # Step 2: Remove new lines
+    # Remove new lines
     print("Removing new lines")
 
     concatenated = concatenated.replace("\n", " ")
 
-    # Step 3: Group entries in list
+    # Group entries in list
     print("Grouping entries")
 
     entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 
-    # Step 4: Convert entries_raw to entries
+    # Convert entries_raw to entries
     print("Converting entries to objects")
 
     entries = []
@@ -108,12 +108,12 @@ def get_json():
         entries.append(Entry(word, definitions, pos))
         print(f":: {word}")
 
-    # Step 5: Format json string based on entryObjects
+    # Format json string based on entryObjects
     print("Formatting object list to json")
 
     json_str = json.dumps(entries, default=__json_handler)
 
-    # Step 6: Check json validity
+    # Check json validity
     print("Validating json")
 
     try:
@@ -122,6 +122,6 @@ def get_json():
         print("Error: Json is invalid.")
         exit(-1)
 
-    # Step 7: Return json
+    # Return json
     print("Done, returning")
     return json_str
