@@ -14,9 +14,9 @@ class Definition:
 
 
 # Get json
-print("Retrieving json")
+print("Getting json definitions")
 
-json_str = gcide_json.get_json()
+json_str = gcide_json.get_definitions_json()
 
 # Deserialize json
 print("Deserializing json")

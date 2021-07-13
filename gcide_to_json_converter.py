@@ -51,8 +51,8 @@ def __get_definitions_raw(entry):
     return filtered or None
 
 
-def get_json():
-    # Concatenate CIDE.(A-Z)
+def get_definitions():
+    # Concatenate CIDE.[A-Z]
     print("Concatenating CIDE files")
 
     concatenated = ""
@@ -87,6 +87,15 @@ def get_json():
 
             for text, source in zip(definition_texts, definition_sources):
                 definitions.append(Definition(word, text, source, pos))
+
+    return definitions
+
+
+def get_definitions_json():
+    # get definitions
+    print("Getting definitions")
+
+    definitions = get_definitions()
 
     # Format json string based on entryObjects
     print("Formatting object list to json")

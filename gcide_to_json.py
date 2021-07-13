@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import gcide_to_json_converter as json
+import gcide_to_json_converter
 
 print("Writing to output.json")
 
 with open("output.json", "w") as out:
-    out.write(json.get_json())
+    out.write(gcide_to_json_converter.get_definitions_json())
