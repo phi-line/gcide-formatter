@@ -2,8 +2,7 @@
 
 import re
 import os
-from bs4 import BeautifulSoup
-import lxml
+import lxml.etree as et
 
 """
 Parses gcide directory and returns python objects
@@ -64,11 +63,14 @@ def get_definitions():
     concatenated = re.sub("<--.*?-->", "", concatenated)
     # Replace webfont tags with unicode characters (according to webfont.txt)
     # TODO
+    # add root tag for xml parser
+    concatenated = "<root>" + concatenated + "</root>"
 
     # Parse XML
     print("parsing XML")
 
-    xml = BeautifulSoup(markup=concatenated, features="lxml")
+    parser = et.XMLParser(recover=True)
+    root = et.fromstring(concatenated, parser=parser)
 
     # vvv OLD implementation, to be replaced by BeautifulSoup XML parsing vvv
     # # Group entries in list
