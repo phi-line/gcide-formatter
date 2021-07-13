@@ -2,6 +2,8 @@
 
 import re
 import os
+from bs4 import BeautifulSoup
+import lxml
 
 """
 Parses gcide directory and returns python objects
@@ -24,21 +26,22 @@ def __get_cide_files():
     return files_list
 
 
-# TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
-# TODO unsafe group() call (could be None type)
-def __get_word(entry):
-    return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry).group()
-
-
-def __get_pos(entry):
-    match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry)
-    return "None" if match is None else match.group()
-
-
-def __get_definitions_raw(entry):
-    match = re.findall("""<def>.*?</def>.*?</source>]""", entry)
-    filtered = filter(lambda x: x is not None, match)
-    return filtered or None
+# Old implementation
+# # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
+# # TODO unsafe group() call (could be None type)
+# def __get_word(entry):
+#     return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry).group()
+#
+#
+# def __get_pos(entry):
+#     match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry)
+#     return "None" if match is None else match.group()
+#
+#
+# def __get_definitions_raw(entry):
+#     match = re.findall("""<def>.*?</def>.*?</source>]""", entry)
+#     filtered = filter(lambda x: x is not None, match)
+#     return filtered or None
 
 
 def get_definitions():
@@ -62,27 +65,36 @@ def get_definitions():
     # Replace webfont tags with unicode characters (according to webfont.txt)
     # TODO
 
-    # Group entries in list
-    print("Grouping entries")
+    # Parse XML
+    print("parsing XML")
 
-    entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
+    xml = BeautifulSoup(markup=concatenated, features="lxml")
 
-    # Convert entries_raw to definitions
-    print("Converting entries to objects")
+    # vvv OLD implementation, to be replaced by BeautifulSoup XML parsing vvv
+    # # Group entries in list
+    # print("Grouping entries")
 
-    definitions = []
+    # entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 
-    for i, entry_raw in enumerate(entries_raw):
-        definitions_raw = __get_definitions_raw(entry_raw)
-        word = __get_word(entry_raw)
-        pos = __get_pos(entry_raw)
+    # # Convert entries_raw to definitions
+    # print("Converting entries to objects")
 
-        for definition in definitions_raw:
-            definition_texts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
-            definition_sources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
-            # TODO sources not bound to texts, could lead to errors/wrong source
+    # definitions = []
 
-            for text, source in zip(definition_texts, definition_sources):
-                definitions.append(Definition(word, text, source, pos))
+    # for i, entry_raw in enumerate(entries_raw):
+    #     definitions_raw = __get_definitions_raw(entry_raw)
+    #     word = __get_word(entry_raw)
+    #     pos = __get_pos(entry_raw)
 
-    return definitions
+    #     for definition in definitions_raw:
+    #         definition_texts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
+    #         definition_sources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
+    #         # TODO sources not bound to texts, could lead to errors/wrong source
+
+    #         for text, source in zip(definition_texts, definition_sources):
+    #             definitions.append(Definition(word, text, source, pos))
+
+    # return definitions
+
+
+get_definitions()
