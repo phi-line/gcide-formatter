@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-import gcide_to_json_converter as gcide_json
-import json
+import gcide_parser
 import sqlite3
 
 
@@ -16,7 +15,7 @@ class Definition:
 # Get definitions
 print("Getting definitions")
 
-definitions = gcide_json.get_definitions()
+definitions = gcide_parser.get_definitions()
 
 # Create an Sqlite3 database
 print("Creating gcide.db")

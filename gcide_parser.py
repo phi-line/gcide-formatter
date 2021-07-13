@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
-import json
-import os
 import re
+import os
+
+"""
+Parses gcide directory and returns python objects
+"""
 
 
 class Definition:
@@ -11,19 +14,6 @@ class Definition:
         self.text = text
         self.source = source
         self.pos = pos
-
-    def to_json(self):
-        return self.__dict__
-
-    @staticmethod
-    def from_json(json_str):
-        definition = Definition("", "", "", "")
-        definition.__dict__ = json_str
-        return definition
-
-
-def __json_handler(obj):
-    return obj.to_json()
 
 
 def __get_cide_files():
@@ -89,28 +79,3 @@ def get_definitions():
                 definitions.append(Definition(word, text, source, pos))
 
     return definitions
-
-
-def get_definitions_json():
-    # get definitions
-    print("Getting definitions")
-
-    definitions = get_definitions()
-
-    # Format json string based on entryObjects
-    print("Formatting object list to json")
-
-    json_str = json.dumps(definitions, default=__json_handler)
-
-    # Check json validity
-    print("Validating json")
-
-    try:
-        json.loads(json_str)
-    except ValueError:
-        print("Error: Json is invalid.")
-        exit(-1)
-
-    # Return json
-    print("Done, returning")
-    return json_str
