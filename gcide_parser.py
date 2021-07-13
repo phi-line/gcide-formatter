@@ -62,7 +62,14 @@ def get_definitions():
     # Remove comments TODO is this really necessary?
     concatenated = re.sub("<--.*?-->", "", concatenated)
     # Replace webfont tags with unicode characters (according to webfont.txt)
-    # TODO
+    with open("tags.txt", "r", encoding="utf-8") as t:
+        for line in t.readlines():
+            hexcode = re.search("^..", line).group()
+            tag = re.search("(?<=,).*?(?=,)", line)
+            tag = None if tag is None else tag.group()
+            unicode = re.search(".$", line).group()
+            print(f"hex: {hexcode}, tag: {tag}, unicode: {unicode}")
+
     # add root tag for xml parser
     concatenated = "<root>" + concatenated + "</root>"
 
