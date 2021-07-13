@@ -3,14 +3,9 @@
 import gcide_parser
 import sqlite3
 
-
-class Definition:
-    def __init__(self, word, text, source, pos):
-        self.word = word
-        self.text = text
-        self.source = source
-        self.pos = pos
-
+"""
+Inserts parsed definitions to sqlite database
+"""
 
 # Get definitions
 print("Getting definitions")
@@ -41,7 +36,7 @@ db.execute(
 print("Inserting definitions")
 
 for id, definition in enumerate(definitions):
-    definition_escaped = Definition(
+    definition_escaped = gcide_parser.Definition(
         definition.word.replace("\"", "''"),
         definition.text.replace("\"", "''"),
         definition.source.replace("\"", "''"),
