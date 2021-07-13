@@ -72,6 +72,15 @@ def get_definitions():
     parser = et.XMLParser(recover=True)
     root = et.fromstring(concatenated, parser=parser)
 
+    entries = root.findall("p")
+
+    for entry in entries:
+        name = entry.find("ent")
+        if name is None:
+            print("None")
+        else:
+            print(name.text)
+
     # vvv OLD implementation, to be replaced by BeautifulSoup XML parsing vvv
     # # Group entries in list
     # print("Grouping entries")
