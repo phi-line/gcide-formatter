@@ -50,10 +50,17 @@ def get_definitions():
         with open(f"input/{file}", encoding='cp1252') as f:
             concatenated = concatenated + f.read()
 
-    # Remove new lines
-    print("Removing new lines")
+    # Clean up concatenated text
+    print("Cleaning up concatenated text")
 
+    # Remove new lines
     concatenated = concatenated.replace("\n", " ")
+    # Remove <br/ tags TODO is this really necessary?
+    concatenated = concatenated.replace("<br/", "")
+    # Remove comments TODO is this really necessary?
+    concatenated = re.sub("<--.*?-->", "", concatenated)
+    # Replace webfont tags with unicode characters (according to webfont.txt)
+    # TODO
 
     # Group entries in list
     print("Grouping entries")
