@@ -21,18 +21,9 @@ json_str = gcide_json.get_json()
 # Deserialize json
 print("Deserializing json")
 
-entries = json.loads(json_str)
-entries = map(lambda j: gcide_json.Entry.from_json(j), entries)
-entries = list(entries)
-
-# Convert entries to definitions
-
-definitions = []
-
-for entry in entries:
-    for definition in entry.definitions:
-        d = Definition(entry.word, definition.text, definition.source, entry.pos)
-        definitions.append(d)
+definitions = json.loads(json_str)
+definitions = map(lambda j: gcide_json.Definition.from_json(j), definitions)
+definitions = list(definitions)
 
 # Create an Sqlite3 database
 print("Creating gcide.db")
