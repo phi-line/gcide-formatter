@@ -5,10 +5,11 @@ import os
 import re
 
 
-class Entry:
-    def __init__(self, word, definitions, pos):
+class Definition:
+    def __init__(self, word, text, source, pos):
         self.word = word
-        self.definitions = definitions
+        self.text = text
+        self.source = source
         self.pos = pos
 
     def to_json(self):
@@ -16,23 +17,7 @@ class Entry:
 
     @staticmethod
     def from_json(json_str):
-        entry = Entry("", list(), "")
-        entry.__dict__ = json_str
-        entry.definitions = list(map(lambda json_def: Definition.from_json(json_def), json_str["definitions"]))
-        return entry
-
-
-class Definition:
-    def __init__(self, text, source):
-        self.text = text
-        self.source = source
-
-    def to_json(self):
-        return self.__dict__
-
-    @staticmethod
-    def from_json(json_str):
-        definition = Definition("", "")
+        definition = Definition("", "", "", "")
         definition.__dict__ = json_str
         return definition
 
@@ -85,33 +70,28 @@ def get_json():
 
     entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
 
-    # Convert entries_raw to entries
+    # Convert entries_raw to definitions
     print("Converting entries to objects")
 
-    entries = []
+    definitions = []
 
     for i, entry_raw in enumerate(entries_raw):
-        print(f"  Parsing entry {i}", end=" ")
         definitions_raw = __get_definitions_raw(entry_raw)
-        definitions = []
+        word = __get_word(entry_raw)
+        pos = __get_pos(entry_raw)
 
         for definition in definitions_raw:
             definition_texts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
             definition_sources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
             # TODO sources not bound to texts, could lead to errors/wrong source
 
-            definitions_map = map(lambda text, source: Definition(text, source), definition_texts, definition_sources)
-            definitions = list(definitions_map)
-
-        word = __get_word(entry_raw)
-        pos = __get_pos(entry_raw)
-        entries.append(Entry(word, definitions, pos))
-        print(f":: {word}")
+            for text, source in zip(definition_texts, definition_sources):
+                definitions.append(Definition(word, text, source, pos))
 
     # Format json string based on entryObjects
     print("Formatting object list to json")
 
-    json_str = json.dumps(entries, default=__json_handler)
+    json_str = json.dumps(definitions, default=__json_handler)
 
     # Check json validity
     print("Validating json")
