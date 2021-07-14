@@ -2,7 +2,7 @@
 
 import re
 import os
-import lxml.etree as et
+from bs4 import BeautifulSoup
 
 """
 Parses gcide directory and returns python objects
@@ -18,107 +18,50 @@ class Definition:
 
 
 def __get_cide_files():
-    files = os.listdir("input")
+    files = os.listdir("xml_files")
     files_sorted = sorted(files)
-    files_filtered = filter(lambda name: re.match("^CIDE.\\w$", name), files_sorted)
+    files_filtered = filter(lambda name: re.match("^gcide.\\w.xml$", name), files_sorted)
     files_list = list(files_filtered)
     return files_list
 
 
-# Old implementation
-# # TODO there could be multiple <ent>s (e.g. 'Newton') (not high priority)
-# # TODO unsafe group() call (could be None type)
-# def __get_word(entry):
-#     return re.search("""(?<=<ent>).*?(?=</?ent>)""", entry).group()
-#
-#
-# def __get_pos(entry):
-#     match = re.search("""(?<=<pos>).*?(?=</pos>)""", entry)
-#     return "None" if match is None else match.group()
-#
-#
-# def __get_definitions_raw(entry):
-#     match = re.findall("""<def>.*?</def>.*?</source>]""", entry)
-#     filtered = filter(lambda x: x is not None, match)
-#     return filtered or None
-
-
 def get_definitions():
-    # Concatenate CIDE.[A-Z]
-    print("Concatenating CIDE files")
+    definition_objects = []
 
-    concatenated = ""
     for file in __get_cide_files():
-        with open(f"input/{file}", encoding='cp1252') as f:
-            concatenated = concatenated + f.read()
+        xml = open(f"xml_files/{file}", "r")
+        xml = xml.read()
+        xml = "<root>" + xml + "</root>"
+        parser = BeautifulSoup(markup=xml, features="lxml-xml")
+        p_list = parser.find_all("p")
+        p_groups = []
+        for p in p_list:
+            if p.find("ent") is not None:
+                p_group = [p]
+                p_groups.append(p_group)
+            elif p_groups.__len__() < 1:
+                pass
+            else:
+                p_groups[p_groups.__len__() - 1].append(p)
 
-    # Clean up concatenated text
-    print("Cleaning up concatenated text")
+        for p_group in p_groups:
+            entry = p_group[0].find("ent")
+            for p in p_group:
+                definitions = p.find_all("def")  # TODO could be preceded by <sn>
+                part_of_speech = p.find_all("pos", recursive=False)  # TODO could be preceded by (n)
+                sources = p.find_all("source")
+                # TODO <pr> pronunciation
+                # TODO other <tags>
 
-    # Remove new lines
-    concatenated = concatenated.replace("\n", " ")
-    # Remove <br/ tags TODO is this really necessary?
-    concatenated = concatenated.replace("<br/", "")
-    # Remove comments TODO is this really necessary?
-    concatenated = re.sub("<--.*?-->", "", concatenated)
-    # Replace webfont tags with unicode characters (according to webfont.txt)
-    with open("tags.txt", "r", encoding="utf-8") as t:
-        for line in t.readlines():
-            hexcode = re.search("^..", line).group()
-            tag = re.search("(?<=,).*?(?=,)", line)
-            tag = None if tag is None else tag.group()
-            unicode = re.search(".$", line).group()
-            print(f"    {concatenated[:500]}")
-            print(f"  Replacing \\'{hexcode} with {unicode}")
+                # TODO don't get first source and first POS, pass list instead
+                part_of_speech = part_of_speech[0].text if part_of_speech.__len__() >= 1 else None
+                sources = sources[0].text if sources.__len__() >= 1 else None
 
-            concatenated = concatenated.replace(f"\\'{hexcode}", unicode)
-            if tag is not None and tag.__len__() > 0:
-                print(f"  Replacing {tag} with {unicode}")
-                concatenated = concatenated.replace(tag, unicode)
+                for definition in definitions:
+                    print(f"{definition_objects.__len__()} ({entry.text})")
+                    definition_objects.append(
+                        Definition(entry.text, definition.text, sources, part_of_speech)
+                    )
 
-    # add root tag for xml parser
-    concatenated = "<root>" + concatenated + "</root>"
+    return definition_objects
 
-    # Parse XML
-    print("parsing XML")
-
-    parser = et.XMLParser(recover=True)
-    root = et.fromstring(concatenated, parser=parser)
-
-    entries = root.findall("p")  # TODO stops at acetonuria
-
-    for entry in entries:
-        name = entry.find("ent")
-        if name is None:
-            print("None")
-        else:
-            print(name.text)
-
-    # vvv OLD implementation, to be replaced by BeautifulSoup XML parsing vvv
-    # # Group entries in list
-    # print("Grouping entries")
-
-    # entries_raw = re.findall("""<p><ent>.*?(?=<p><ent>)""", concatenated)
-
-    # # Convert entries_raw to definitions
-    # print("Converting entries to objects")
-
-    # definitions = []
-
-    # for i, entry_raw in enumerate(entries_raw):
-    #     definitions_raw = __get_definitions_raw(entry_raw)
-    #     word = __get_word(entry_raw)
-    #     pos = __get_pos(entry_raw)
-
-    #     for definition in definitions_raw:
-    #         definition_texts = re.findall("""(?<=<def>).*?(?=</def>)""", definition)
-    #         definition_sources = re.findall("""(?<=<source>).*?(?=</source>)""", definition)
-    #         # TODO sources not bound to texts, could lead to errors/wrong source
-
-    #         for text, source in zip(definition_texts, definition_sources):
-    #             definitions.append(Definition(word, text, source, pos))
-
-    # return definitions
-
-
-get_definitions()
