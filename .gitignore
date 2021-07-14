@@ -1,5 +1,5 @@
 venv/
-xml-files/
+xml_files/
 .idea/
 __pycache__/
 gcide.db
