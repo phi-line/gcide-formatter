@@ -62,17 +62,19 @@ def get_definitions():
     # Remove comments TODO is this really necessary?
     concatenated = re.sub("<--.*?-->", "", concatenated)
     # Replace webfont tags with unicode characters (according to webfont.txt)
-    # TODO seems to break XML parsing
     with open("tags.txt", "r", encoding="utf-8") as t:
         for line in t.readlines():
             hexcode = re.search("^..", line).group()
             tag = re.search("(?<=,).*?(?=,)", line)
             tag = None if tag is None else tag.group()
             unicode = re.search(".$", line).group()
-            print(f"  Replacing {hexcode} with {unicode}")
+            print(f"    {concatenated[:500]}")
+            print(f"  Replacing \\'{hexcode} with {unicode}")
 
             concatenated = concatenated.replace(f"\\'{hexcode}", unicode)
-            concatenated = concatenated.replace(tag, unicode)
+            if tag is not None and tag.__len__() > 0:
+                print(f"  Replacing {tag} with {unicode}")
+                concatenated = concatenated.replace(tag, unicode)
 
     # add root tag for xml parser
     concatenated = "<root>" + concatenated + "</root>"
@@ -81,11 +83,9 @@ def get_definitions():
     print("parsing XML")
 
     parser = et.XMLParser(recover=True)
-    print("parser initialized")
     root = et.fromstring(concatenated, parser=parser)
-    print("xml parsed")
 
-    entries = root.findall("p")  # TODO empty, see webfont/unicode replacement above
+    entries = root.findall("p")  # TODO stops at acetonuria
 
     for entry in entries:
         name = entry.find("ent")
