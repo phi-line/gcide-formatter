@@ -35,8 +35,8 @@ db.execute(
 # Insert definitions to table
 print("Inserting definitions")
 
-for id, definition in enumerate(definitions):
-    definition_escaped = gcide_parser.Definition(
+for i, definition in enumerate(definitions):
+    definition = gcide_parser.Definition(
         definition.word.replace("\"", "''"),
         definition.text.replace("\"", "''"),
         definition.source.replace("\"", "''"),
@@ -45,11 +45,11 @@ for id, definition in enumerate(definitions):
     db.execute(
         f"""
         INSERT INTO Definitions (id, word, text, source, pos) VALUES (
-            {id},
-            "{definition_escaped.word}",
-            "{definition_escaped.text}",
-            "{definition_escaped.source}",
-            "{definition_escaped.pos}"
+            {i},
+            "{definition.word}",
+            "{definition.text}",
+            "{definition.source}",
+            "{definition.pos}"
         ) 
         """
     )
