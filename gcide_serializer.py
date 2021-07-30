@@ -1,22 +1,14 @@
 #!/usr/bin/env python
 
 import json
-import os
-import re
-
-from gcide_parser import xml_to_objects
+import gcide_parser
 
 
 def __json_handler(obj):
     return obj.__dict__
 
 
-def get_definitions_json():
-    # get definitions
-    print("Getting definitions")
-
-    definitions = xml_to_objects()
-
+def get_definitions_json(definitions=gcide_parser.xml_to_objects()):
     # Format json string based on entryObjects
     print("Formatting object list to json")
 
