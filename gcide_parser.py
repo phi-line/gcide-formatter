@@ -140,11 +140,10 @@ def get_definitions():
         for p_group in p_groups:
             entry = p_group[0].find("ent")
             for p in p_group:
-                definitions = p.find_all("def")  # TODO could be preceded by <sn>
-                part_of_speech = p.find_all("pos", recursive=False)  # TODO could be preceded by (n)
+                definitions = p.find_all("def")
+                part_of_speech = p.find_all("pos", recursive=False)
                 sources = p.find_all("source")
                 # TODO <pr> pronunciation
-                # TODO other <tags>
 
                 # TODO don't get first source and first POS, pass list instead
                 part_of_speech = part_of_speech[0].text if part_of_speech.__len__() >= 1 else None
