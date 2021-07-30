@@ -4,10 +4,6 @@ import re
 import os
 from bs4 import BeautifulSoup
 
-"""
-Parses gcide directory and returns python objects
-"""
-
 tags = [
     ("<Cced/", "Ç"),
     ("<uum/", "ü"),
@@ -110,18 +106,15 @@ class Definition:
         self.pos = pos
 
 
-def __get_cide_files():
-    files = os.listdir("xml_files")
-    files_sorted = sorted(files)
-    files_filtered = filter(lambda name: re.match("^gcide.\\w.xml$", name), files_sorted)
-    files_list = list(files_filtered)
-    return files_list
-
-
 def get_definitions():
     definition_objects = []
 
-    for file in __get_cide_files():
+    files = os.listdir("xml_files")
+    files = sorted(files)
+    files = filter(lambda name: re.match("^gcide.\\w.xml$", name), files)
+    files = list(files)
+
+    for file in files:
         xml = open(f"xml_files/{file}", "r")
         xml = xml.read()
         xml = "<root>" + xml + "</root>"
