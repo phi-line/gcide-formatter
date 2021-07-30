@@ -146,8 +146,6 @@ def xml_to_objects():
                 sources = list(sources)
                 sources = " ".join(sources)
 
-                # TODO <pr> pronunciation
-
                 for definition in definitions:
                     print(f"{definition_objects.__len__()} ({entry})")
                     definition_objects.append(
