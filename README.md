@@ -1,13 +1,18 @@
 # gcide-formatter
 
-Convert the GNU Collaborative International Dictionary of English to JSON or sqlite3.
+Convert the GNU Collaborative International Dictionary of English to an SQLite database.
 
-## How to use:
+## How to use
 
-1. Download latest version of GCIDE
-2. Extract the archive
-3. Rename the extracted directory from `gcide-x.xx/` to `input/`
-4. Place `input/` in this directory
-5. 
-    * For JSON, run `./json_gcide.py`.
-    * For sqlite3, run `./gcide_json_to_sqlite3`
+1. `pip install beautifulsoup4`
+1. Download the latest version of [GCIDE_XML](http://www.ibiblio.org/webster/)
+2. Extract the archive and move the containing xml_files directory here
+3. Run `./gcide_sqlite.py`
+
+```shell
+pip install beautifulsoup4
+curl http://www.ibiblio.org/webster/gcide_xml-0.51.zip
+unzip gcide_xml-0.51.zip
+mv gcide_xml-0.51/xml_files gcide-formatter
+./gcide_sqlite.py
+```
