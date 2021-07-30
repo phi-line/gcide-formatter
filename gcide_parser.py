@@ -132,20 +132,26 @@ def xml_to_objects():
 
         for p_group in p_groups:
             entry = p_group[0].find("ent")
+            entry = entry.text
             for p in p_group:
                 definitions = p.find_all("def")
-                part_of_speech = p.find_all("pos", recursive=False)
+                definitions = map(lambda d: d.text, definitions)
+                definitions = list(definitions)
+
+                part_of_speech = p.find("pos", recursive=False)
+                part_of_speech = part_of_speech.text if part_of_speech is not None else ""
+
                 sources = p.find_all("source")
+                sources = map(lambda s: s.text, sources)
+                sources = list(sources)
+                sources = " ".join(sources)
+
                 # TODO <pr> pronunciation
 
-                # TODO don't get first source and first POS, pass list instead
-                part_of_speech = part_of_speech[0].text if part_of_speech.__len__() >= 1 else ""
-                sources = sources[0].text if sources.__len__() >= 1 else ""
-
                 for definition in definitions:
-                    print(f"{definition_objects.__len__()} ({entry.text})")
+                    print(f"{definition_objects.__len__()} ({entry})")
                     definition_objects.append(
-                        Definition(entry.text, definition.text, sources, part_of_speech)
+                        Definition(entry, definition, sources, part_of_speech)
                     )
 
     return definition_objects
