@@ -139,8 +139,8 @@ def xml_to_objects():
                 # TODO <pr> pronunciation
 
                 # TODO don't get first source and first POS, pass list instead
-                part_of_speech = part_of_speech[0].text if part_of_speech.__len__() >= 1 else None
-                sources = sources[0].text if sources.__len__() >= 1 else None
+                part_of_speech = part_of_speech[0].text if part_of_speech.__len__() >= 1 else ""
+                sources = sources[0].text if sources.__len__() >= 1 else ""
 
                 for definition in definitions:
                     print(f"{definition_objects.__len__()} ({entry.text})")
