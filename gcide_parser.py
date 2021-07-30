@@ -106,7 +106,7 @@ class Definition:
         self.pos = pos
 
 
-def get_definitions():
+def xml_to_objects():
     definition_objects = []
 
     files = os.listdir("xml_files")

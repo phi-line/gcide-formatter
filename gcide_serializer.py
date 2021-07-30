@@ -4,7 +4,7 @@ import json
 import os
 import re
 
-from gcide_parser import get_definitions
+from gcide_parser import xml_to_objects
 
 
 def __json_handler(obj):
@@ -15,7 +15,7 @@ def get_definitions_json():
     # get definitions
     print("Getting definitions")
 
-    definitions = get_definitions()
+    definitions = xml_to_objects()
 
     # Format json string based on entryObjects
     print("Formatting object list to json")

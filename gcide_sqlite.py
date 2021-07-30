@@ -10,7 +10,7 @@ Inserts parsed definitions to sqlite database
 # Get definitions
 print("Getting definitions")
 
-definitions = gcide_parser.get_definitions()
+definitions = gcide_parser.xml_to_objects()
 
 # Create an Sqlite3 database
 print("Creating gcide.db")
