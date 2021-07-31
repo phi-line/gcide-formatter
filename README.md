@@ -1,8 +1,10 @@
 # gcide-formatter
 
-Convert the GNU Collaborative International Dictionary of English to an SQLite database.
+Transforms GCIDE_XML into structured data formats (JSON or SQLite3-database). Gcide-Formatter parses definitions and their respective sources and part of speech.
 
-## Installing
+## How to use
+
+### Installing
 
 ```
 git clone https://codeberg.org/noahjutz/gcide-formatter.git
@@ -10,13 +12,13 @@ cd gcide-formatter
 pip install .
 ```
 
-## Usage
+### Usage
 
 ```
 gcide --help
 ```
 
-## Uninstalling
+### Uninstalling
 
 ```
 pip uninstall gcide
