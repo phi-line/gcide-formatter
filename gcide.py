@@ -17,23 +17,22 @@ def cli():
 @cli.command()
 def json():
     """
-    Creates 'gcide.json' file.
+    Creates 'gcide.json' file. It consists of an array of JSON objects.
 
     \b
-    JSON Format example:
-    [
-        ...
-        {
-            "id":12,
-            "word":"prolong",
-            "text":"To put off to a distant time; to postpone",
-            "source":"1913 Webster",
-            "pos":"v. t."
-        }
-        ...
-    ]
+    JSON object format:
+    {
+        "word":"prolong",
+        "text":"To put off to a distant time; to postpone",
+        "source":"1913 Webster",
+        "pos":"v. t."
+    }
     """
     click.echo("json")
+    definitions = gcide_parser.xml_to_objects()
+    json = definitions_json.definitions_json(definitions)
+    with open("gcide.json", "w") as file:
+        file.write(json)
 
 
 @cli.command()
