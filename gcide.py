@@ -9,7 +9,7 @@ import gcide_downloader
 def cli():
     """
     Transforms GCIDE_XML into structured data formats (JSON or SQLite3-database). Gcide-Formatter
-    Parses only definitions and their respective sources and part of speech.
+    parses definitions and their respective sources and part of speech.
     """
     pass
 
