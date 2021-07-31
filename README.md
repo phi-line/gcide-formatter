@@ -2,10 +2,22 @@
 
 Convert the GNU Collaborative International Dictionary of English to an SQLite database.
 
-## How to use
+## Installing
 
-```shell
-pip install click
-pip install beautifulsoup4
-./gcide.py
+```
+git clone https://codeberg.org/noahjutz/gcide-formatter.git
+cd gcide-formatter
+pip install .
+```
+
+## Usage
+
+```
+gcide --help
+```
+
+## Uninstalling
+
+```
+pip uninstall gcide
 ```
