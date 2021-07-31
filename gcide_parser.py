@@ -1,8 +1,7 @@
-#!/usr/bin/env python
-
 import re
 import os
 from bs4 import BeautifulSoup
+import lxml
 
 
 class Definition:

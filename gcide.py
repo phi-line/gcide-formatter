@@ -1,3 +1,6 @@
 import click
 
-# TODO
+@click.command()
+def cli():
+    """Example script."""
+    click.echo('Hello World!')
