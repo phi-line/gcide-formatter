@@ -28,7 +28,6 @@ def json():
         "pos":"v. t."
     }
     """
-    click.echo("json")
     definitions = gcide_parser.xml_to_objects()
     json = definitions_json.definitions_json(definitions)
     with open("gcide.json", "w") as file:
@@ -49,4 +48,5 @@ def sqlite():
     pos         TEXT        NOT NULL
 
     """
-    click.echo("sqlite")
+    definitions = gcide_parser.xml_to_objects()
+    definitions_sqlite.definitions_sqlite(definitions)
