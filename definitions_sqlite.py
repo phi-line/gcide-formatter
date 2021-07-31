@@ -2,7 +2,7 @@ import gcide_parser
 import sqlite3
 
 
-def create_definition_database(definitions):
+def definitions_sqlite(definitions):
     # Create an Sqlite3 database
     print("Creating gcide.db")
 
