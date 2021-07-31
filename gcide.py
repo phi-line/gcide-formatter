@@ -3,7 +3,14 @@ import gcide_parser
 import gcide_sqlite
 import gcide_serializer
 
-@click.command()
+@click.group()
 def cli():
-    """Example script."""
-    click.echo('Hello World!')
+    pass
+
+@cli.command()
+def json():
+    click.echo("json")
+
+@cli.command()
+def sqlite():
+    click.echo("sqlite")
