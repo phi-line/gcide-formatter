@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='yourscript',
+    name='gcide',
     version='1.0.0-dev01',
     py_modules=['gcide'],
     install_requires=[

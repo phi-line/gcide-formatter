@@ -6,7 +6,7 @@ def __json_handler(obj):
     return obj.__dict__
 
 
-def get_definitions_json(definitions=gcide_parser.xml_to_objects()):
+def get_definitions_json(definitions):
     # Format json string based on entryObjects
     print("Formatting object list to json")
 
