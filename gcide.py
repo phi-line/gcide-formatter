@@ -24,7 +24,6 @@ def cli(fetch_xml, gcide_dir):
     else:
         global gcide_directory
         gcide_directory = gcide_dir
-    pass
 
 
 @cli.command()
