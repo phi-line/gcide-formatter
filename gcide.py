@@ -7,8 +7,9 @@ import gcide_downloader
 
 @click.group()
 @click.option('--fetch-xml', default=False, help='Download GCIDE_XML files from ibiblio.org/webster/.')
+@click.option('--gcide-url', default='http://www.ibiblio.org/webster/gcide_xml-0.51.zip', help='URL to GCIDE_XML zip file to fetch')
 @click.option('--gcide-dir', default='xml_files', help='GCIDE_XML directory path.')
-def cli(fetch_xml, gcide_dir):
+def cli(fetch_xml, gcide_url, gcide_dir):
     """
     Transforms GCIDE_XML into structured data formats (JSON or SQLite3-database). Gcide-Formatter
     parses definitions and their respective sources and part of speech.
@@ -20,7 +21,7 @@ def cli(fetch_xml, gcide_dir):
     Learn more about GCIDE_XML on ibiblio.org/webster/.
     """
     if (fetch_xml):
-        gcide_downloader.download_gcide_xml()
+        gcide_downloader.download_gcide_xml(gcide_url)
     else:
         global gcide_directory
         gcide_directory = gcide_dir
