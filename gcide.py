@@ -19,10 +19,11 @@ def cli(fetch_xml, gcide_dir):
 
     Learn more about GCIDE_XML on ibiblio.org/webster/.
     """
-    if (fetch):
+    if (fetch_xml):
         gcide_downloader.download_gcide_xml()
     else:
-        global gcide_dir = gcide_dir
+        global gcide_directory
+        gcide_directory = gcide_dir
     pass
 
 
@@ -40,7 +41,7 @@ def json():
         "pos":"v. t."
     }
     """
-    definitions = core.xml_to_objects()
+    definitions = core.xml_to_objects(gcide_directory)
     json = definitions_json.definitions_json(definitions)
     with open("gcide.json", "w") as file:
         file.write(json)
@@ -58,7 +59,6 @@ def sqlite():
     text        TEXT        NOT NULL,
     source      TEXT        NOT NULL,
     pos         TEXT        NOT NULL
-
     """
-    definitions = core.xml_to_objects()
+    definitions = core.xml_to_objects(gcide_directory)
     definitions_sqlite.definitions_sqlite(definitions)

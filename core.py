@@ -12,16 +12,16 @@ class Definition:
         self.pos = pos
 
 
-def xml_to_objects():
+def xml_to_objects(gcide_dir):
     definition_objects = []
 
-    files = os.listdir("xml_files")
+    files = os.listdir(gcide_dir)
     files = sorted(files)
     files = filter(lambda name: re.match("^gcide.\\w.xml$", name), files)
     files = list(files)
 
     for file in files:
-        xml = open(f"xml_files/{file}", "r")
+        xml = open(f"{gcide_dir}/{file}", "r")
         xml = xml.read()
         xml = "<root>" + xml + "</root>"
         parser = BeautifulSoup(markup=xml, features="lxml-xml")
