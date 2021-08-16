@@ -24,26 +24,25 @@ def definitions_sqlite(definitions):
     )
 
     # Insert definitions to table
-    print("Inserting definitions")
-
-    for i, definition in enumerate(definitions):
-        definition = core.Definition(
-            definition.word.replace("\"", "''"),
-            definition.text.replace("\"", "''"),
-            definition.source.replace("\"", "''"),
-            definition.pos.replace("\"", "''")
-        )
-        db.execute(
-            f"""
-            INSERT INTO Definitions (id, word, text, source, pos) VALUES (
-                {i},
-                "{definition.word}",
-                "{definition.text}",
-                "{definition.source}",
-                "{definition.pos}"
-            ) 
-            """
-        )
+    with click.progressbar(enumerate(definitions), length=len(definitions), label="Inserting definitions") as definitions:
+        for i, definition in definitions:
+            definition = core.Definition(
+                definition.word.replace("\"", "''"),
+                definition.text.replace("\"", "''"),
+                definition.source.replace("\"", "''"),
+                definition.pos.replace("\"", "''")
+            )
+            db.execute(
+                f"""
+                INSERT INTO Definitions (id, word, text, source, pos) VALUES (
+                    {i},
+                    "{definition.word}",
+                    "{definition.text}",
+                    "{definition.source}",
+                    "{definition.pos}"
+                ) 
+                """
+            )
 
     # Close DB
     print("Closing database")
