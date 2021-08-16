@@ -1,5 +1,4 @@
 import json
-import gcide_parser
 
 
 def __json_handler(obj):

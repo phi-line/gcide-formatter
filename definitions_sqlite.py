@@ -1,4 +1,3 @@
-import gcide_parser
 import sqlite3
 
 

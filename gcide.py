@@ -1,5 +1,5 @@
 import click
-import gcide_parser
+import core
 import definitions_sqlite
 import definitions_json
 import gcide_downloader
@@ -28,7 +28,7 @@ def json():
         "pos":"v. t."
     }
     """
-    definitions = gcide_parser.xml_to_objects()
+    definitions = core.xml_to_objects()
     json = definitions_json.definitions_json(definitions)
     with open("gcide.json", "w") as file:
         file.write(json)
@@ -48,5 +48,5 @@ def sqlite():
     pos         TEXT        NOT NULL
 
     """
-    definitions = gcide_parser.xml_to_objects()
+    definitions = core.xml_to_objects()
     definitions_sqlite.definitions_sqlite(definitions)
