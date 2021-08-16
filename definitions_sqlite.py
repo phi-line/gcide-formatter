@@ -1,4 +1,5 @@
 import sqlite3
+import core
 
 
 def definitions_sqlite(definitions):
@@ -26,7 +27,7 @@ def definitions_sqlite(definitions):
     print("Inserting definitions")
 
     for i, definition in enumerate(definitions):
-        definition = gcide_parser.Definition(
+        definition = core.Definition(
             definition.word.replace("\"", "''"),
             definition.text.replace("\"", "''"),
             definition.source.replace("\"", "''"),
