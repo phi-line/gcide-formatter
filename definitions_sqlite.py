@@ -1,5 +1,6 @@
 import sqlite3
 import core
+import click
 
 
 def definitions_sqlite(definitions):

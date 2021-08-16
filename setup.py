@@ -2,13 +2,13 @@ from setuptools import setup
 
 setup(
     name='gcide',
-    version='1.0.0-dev01',
+    version='1.0.0',
     py_modules=[
         'gcide',
         'definitions_json',
         'definitions_sqlite',
         'gcide_downloader',
-        'gcide_parser'
+        'core'
     ],
     install_requires=[
         'Click', 'bs4', 'lxml', 'requests'
